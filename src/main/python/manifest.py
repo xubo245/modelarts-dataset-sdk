@@ -21,47 +21,52 @@ from file import is_local, save
 from file import read
 
 
-def get_sample_list(manifest_path, task_type, exactly_match_type=False, *args):
+def get_sample_list(manifest_path, task_type, exactly_match_type=False, access_key=None, secret_key=None,
+                    end_point=None, usage=field_name.default_usage):
   """
   get the sample list from manifest, support local and OBS path;
   If the exactly_match_type is True, then it will match the task type exactly;
   If the exactly_match_type is False, then it will not match the task type exactly and match the suffix of the type
+
   """
-  data_set = parse_manifest(manifest_path, *args)
+  data_set = parse_manifest(manifest_path, access_key=access_key, secret_key=secret_key, end_point=end_point)
   sample_list = data_set.get_sample_list()
   data_list = []
   label_type = field_name.single_lable
-
   for sample in sample_list:
     annotations = sample.get_annotations()
-    label_list = []
-    i = 0
-    for annotation in annotations:
-      if i > 0:
-        label_type = field_name.multi_lable
-      i = i + 1
-      type = annotation.get_type()
-      if not exactly_match_type:
-        if str(type).endswith("/" + task_type):
-          if (task_type == field_name.image_classification or task_type == field_name.sound_classification
-                  or task_type == field_name.text_classification):
-            label_list.append(annotation.get_name())
-          if task_type == field_name.object_detection:
-            label_list.append(annotation.get_loc())
+    sample_usage = sample.get_usage()
+    if str(sample_usage).lower().__eq__(str(usage).lower()) or str(usage).lower().__eq__(field_name.default_usage):
+      label_list = []
+      i = 0
+      for annotation in annotations:
+        if i > 0:
+          label_type = field_name.multi_lable
+        i = i + 1
+        type = annotation.get_type()
+        if not exactly_match_type:
+          if str(type).endswith("/" + task_type):
+            if (task_type == field_name.image_classification or task_type == field_name.sound_classification
+                    or task_type == field_name.text_classification):
+              label_list.append(annotation.get_name())
+            if task_type == field_name.object_detection:
+              label_list.append(annotation.get_loc())
 
-      elif exactly_match_type:
-        if type == task_type:
-          if str(task_type).endswith("/" + field_name.image_classification) \
-                  or str(task_type).endswith("/" + field_name.sound_classification) \
-                  or str(task_type).endswith("/" + field_name.text_classification):
-            label_list.append(annotation.get_name())
-          if str(task_type).endswith("/" + field_name.object_detection):
-            label_list.append(annotation.get_loc())
+        elif exactly_match_type:
+          if type == task_type:
+            if str(task_type).endswith("/" + field_name.image_classification) \
+                    or str(task_type).endswith("/" + field_name.sound_classification) \
+                    or str(task_type).endswith("/" + field_name.text_classification):
+              label_list.append(annotation.get_name())
+            if str(task_type).endswith("/" + field_name.object_detection):
+              label_list.append(annotation.get_loc())
+    else:
+      continue
     data_list.append([sample.get_source(), label_list])
   return data_list, label_type
 
 
-def parse_manifest(manifest_path, *args):
+def parse_manifest(manifest_path, access_key=None, secret_key=None, end_point=None):
   """
   user give the path of manifest file, it will return the dataset,
   including data object list, annotation list and so on after the manifest was parsed.
@@ -101,8 +106,8 @@ def parse_manifest(manifest_path, *args):
                          confidence=annotation_confidence,
                          creation_time=annotation_creation_time,
                          annotated_by=annotated_by, annotation_format=annotation_format))
-          sample_list.append(
-            Sample(source=source, usage=usage, annotations=annotations_list, inference_loc=inference_loc))
+        sample_list.append(
+          Sample(source=source, usage=usage, annotations=annotations_list, inference_loc=inference_loc))
     return DataSet(sample=sample_list, size=size)
 
   local = is_local(manifest_path)
@@ -112,12 +117,9 @@ def parse_manifest(manifest_path, *args):
       lines = f_obj.readlines()
       return __getDataSet(lines)
   else:
-    if args.__len__() < 3:
+    if access_key is None or secret_key is None or end_point is None:
       raise ValueError("Please input ak, sk and endpoint")
-    ak = args[0]
-    sk = args[1]
-    endpoint = args[2]
-    data = read(manifest_path, ak, sk, endpoint)
+    data = read(manifest_path, access_key=access_key, secret_key=secret_key, end_point=end_point)
     result = __getDataSet(data.decode().split("\n"))
     return result
 
@@ -177,6 +179,12 @@ class Sample(object):
     Optional field
     """
     return self.usage
+
+  def get_inference_loc(self):
+    """
+    :return "inference_loc" attribute, one of Optional field
+    """
+    return self.inference_loc
 
   def get_annotations(self):
     """

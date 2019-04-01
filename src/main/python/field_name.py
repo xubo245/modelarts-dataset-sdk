@@ -46,3 +46,10 @@ prefix_s3 = "s3://"
 prefix_s3_upper = "S3://"
 
 separator = "/"
+
+# Usage
+default_usage = "all"
+usage_train = "train"
+usage_eval = "eval"
+usage_test = "test"
+usage_inference = "inference"

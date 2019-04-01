@@ -40,8 +40,22 @@ def test_single_default(path, *args):
   print("Success: test_single_default")
 
 
+def test_single_default_usage(path, *args):
+  sample_list, label_type = manifest.get_sample_list(path, "image_classification", False, usage="train", *args)
+  assert (label_type == field_name.single_lable)
+  check_data(sample_list)
+  print("Success: test_single_default")
+
+
 def test_multi_default(path, *args):
   sample_list, label_type = manifest.get_sample_list(path, "image_classification", False, *args)
+  assert (label_type == field_name.multi_lable)
+  check_data(sample_list)
+  print("Success: test_multi_default")
+
+
+def test_multi_default_usage(path, *args):
+  sample_list, label_type = manifest.get_sample_list(path, "image_classification", False, usage="train", *args)
   assert (label_type == field_name.multi_lable)
   check_data(sample_list)
   print("Success: test_multi_default")
@@ -72,13 +86,14 @@ def main(argv):
   if argv.__len__() < 2:
     path1 = os.path.abspath("../") + "/resources/flowers-xy-V201902220937263726.manifest"
     path2 = os.path.abspath("../") + "/resources/classification-multi-xy-V201902220937263726.manifest"
-    test_single_default(path1)
+    # test_single_default(path1)
+    # test_multi_default(path2)
+    # test_single_exactly_match_type(path1)
+    # test_multi_exactly_match_type(path2)
 
-    test_multi_default(path2)
+    test_single_default_usage(path1)
+    test_multi_default_usage(path2)
 
-    test_single_exactly_match_type(path1)
-
-    test_multi_exactly_match_type(path2)
     print("test local Success")
   else:
     path1 = "s3://carbonsouth/manifest/flowers-xy-V201902220937263726.manifest"

@@ -23,6 +23,20 @@ def check_data(sample_list):
   assert sample_list.__len__() == 2
   for raw_data, label_list in sample_list:
     assert str(raw_data).startswith("s3://obs-ma/test/flowers/datafiles")
+    assert label_list.__len__() == 1 or label_list.__len__() == 0
+
+
+def check_data_usage_inference(sample_list):
+  assert sample_list.__len__() == 1
+  for raw_data, label_list in sample_list:
+    assert str(raw_data).startswith("s3://obs-ma/test/flowers/datafiles")
+    assert label_list.__len__() == 0
+
+
+def check_data_usage(sample_list):
+  assert sample_list.__len__() == 1
+  for raw_data, label_list in sample_list:
+    assert str(raw_data).startswith("s3://obs-ma/test/flowers/datafiles")
     assert label_list.__len__() == 1
 
 
@@ -35,6 +49,35 @@ def check_data_without_label(sample_list):
 
 def test_multi_default(path, *args):
   sample_list, label_type = manifest.get_sample_list(path, "image_classification", False, *args)
+  assert (label_type == field_name.multi_lable)
+  check_data(sample_list)
+  print("success: test_multi_default ")
+
+
+def test_multi_default_usage(path, *args):
+  sample_list, label_type = manifest.get_sample_list(path, "image_classification", False, usage="Train", *args)
+  assert (label_type == field_name.multi_lable)
+  check_data_usage(sample_list)
+  print("success: test_multi_default_usage ")
+
+
+def test_multi_default_usage_inference(path, *args):
+  sample_list, label_type = manifest.get_sample_list(path, "image_classification", False, usage="INFERENCE", *args)
+  assert (label_type == field_name.single_lable)
+  check_data_usage_inference(sample_list)
+  print("success: test_multi_default_usage_inference ")
+
+
+def test_multi_default_usage3(path, *args):
+  sample_list, label_type = manifest.get_sample_list(path, "image_classification", False, usage="all", *args)
+  assert (label_type == field_name.multi_lable)
+  check_data(sample_list)
+  print("success: test_multi_default_usage3 ")
+
+
+def test_multi_default_akskep(path, *args):
+  sample_list, label_type = manifest.get_sample_list(path, "image_classification", access_key=args[0],
+                                                     secret_key=args[1], end_point=args[2])
   assert (label_type == field_name.multi_lable)
   check_data(sample_list)
   print("success: test_multi_default ")
@@ -60,6 +103,9 @@ def main(argv):
     test_multi_default(path2)
     test_multi_exactly_match_type(path2)
     test_multi_exactly_match_type_detect(path2)
+    test_multi_default_usage(path2)
+    test_multi_default_usage_inference(path2)
+    test_multi_default_usage3(path2)
     print("test local Success")
   else:
     path2 = "s3://carbonsouth/manifest/classification-detection-multi-xy-V201902220937263726.manifest"
@@ -71,7 +117,10 @@ def main(argv):
     test_multi_default(path2, ak, sk, endpoint)
     test_multi_exactly_match_type(path2, ak, sk, endpoint)
     test_multi_exactly_match_type_detect(path2, ak, sk, endpoint)
-
+    test_multi_default_akskep(path2, ak, sk, endpoint)
+    test_multi_default_usage(path2, ak, sk, endpoint)
+    test_multi_default_usage_inference(path2, ak, sk, endpoint)
+    test_multi_default_usage3(path2, ak, sk, endpoint)
     print("test OBS Success")
 
 

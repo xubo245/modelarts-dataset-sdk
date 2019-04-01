@@ -27,6 +27,7 @@ def validate(data_set):
     assert data_object.get_usage() == "TRAIN"
 
     annotations = data_object.get_annotations()
+    inference_loc = data_object.get_inference_loc()
     for annotation in annotations:
       annotation_type = annotation.get_type()
       assert annotation_type == "modelarts/image_classification"
@@ -51,7 +52,7 @@ def validate(data_set):
 
       print(annotation_type + "\t" + annotation_name + "\t" + str(annotation_loc) + "\t" + str(
         annotation_property) + "\t" + str(confidence) + "\t" + str(annotation_create_time) + "\t" + str(
-        annotation_annotated_by))
+        annotation_annotated_by + str(inference_loc)))
 
 
 def main(argv):
