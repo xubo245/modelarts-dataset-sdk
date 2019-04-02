@@ -1,4 +1,6 @@
 .idea
+target/
 eSDK_Storage_OBS_V3
-src/main/python/__pycache__/
-src/test/python/__pycache__/
+huaweicloud-sdk-python-modelarts-dataset/obs
+huaweicloud-sdk-python-modelarts-dataset/src/main/python/__pycache__/
+huaweicloud-sdk-python-modelarts-dataset/src/test/python/__pycache__/
