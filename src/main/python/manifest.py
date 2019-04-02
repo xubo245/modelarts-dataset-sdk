@@ -197,8 +197,7 @@ class Sample(object):
 class Annotation:
 
   def __init__(self, name=None, type=None, loc=None, property=None, confidence=None, creation_time=None,
-               annotated_by=None,
-               annotation_format=""):
+               annotated_by=None, annotation_format=None):
     self.name = name
     self.type = type
     self.annotation_loc = loc
