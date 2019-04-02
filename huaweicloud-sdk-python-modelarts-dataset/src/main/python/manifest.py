@@ -84,6 +84,7 @@ def parse_manifest(manifest_path, access_key=None, secret_key=None, end_point=No
         source = text.get(field_name.source)
         assert None != source
         usage = text.get(field_name.usage)
+        id = text.get(field_name.id)
         annotations = text.get(field_name.annotation)
         inference_loc = text.get(field_name.inference_loc) or text.get(field_name.inference_loc2)
         annotations_list = []
@@ -107,7 +108,7 @@ def parse_manifest(manifest_path, access_key=None, secret_key=None, end_point=No
                          creation_time=annotation_creation_time,
                          annotated_by=annotated_by, annotation_format=annotation_format))
         sample_list.append(
-          Sample(source=source, usage=usage, annotations=annotations_list, inference_loc=inference_loc))
+          Sample(source=source, usage=usage, annotations=annotations_list, inference_loc=inference_loc, id=id))
     return DataSet(sample=sample_list, size=size)
 
   local = is_local(manifest_path)
@@ -160,11 +161,12 @@ class DataSet(object):
 
 
 class Sample(object):
-  def __init__(self, source, annotations=None, usage=None, inference_loc=None):
+  def __init__(self, source, annotations=None, usage=None, inference_loc=None, id=None):
     self.source = source
     self.usage = usage
     self.annotation = annotations
     self.inference_loc = inference_loc
+    self.id = id
 
   def get_source(self):
     """
@@ -172,6 +174,13 @@ class Sample(object):
     Mandatory field
     """
     return self.source
+
+  def get_id(self):
+    """
+    :return "id" attribute, one of
+    Optional field
+    """
+    return self.id
 
   def get_usage(self):
     """

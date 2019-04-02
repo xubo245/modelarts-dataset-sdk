@@ -28,6 +28,8 @@ def validate(data_set):
 
     annotations = data_object.get_annotations()
     inference_loc = data_object.get_inference_loc()
+    id = data_object.get_id()
+    assert id is None or str(id).startswith("XGDVG")
     for annotation in annotations:
       annotation_type = annotation.get_type()
       assert annotation_type == "modelarts/image_classification"

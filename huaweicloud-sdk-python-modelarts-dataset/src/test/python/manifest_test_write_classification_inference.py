@@ -27,6 +27,7 @@ def create_manifest():
     source = "s3://obs-ma/test/classification/datafiles/1_1550650984970_" + str(i) + ".jpg"
     usage = "TRAIN"
     inference_loc = "s3://obs-ma/test/classification/datafiles/1_1550650984970_" + str(i) + ".txt"
+    id = "XGDVGS" + str(i)
     annotations_list = []
 
     for j in range(1):
@@ -45,16 +46,17 @@ def create_manifest():
                    creation_time=annotation_creation_time,
                    annotated_by=annotated_by, annotation_format=annotation_format))
     sample_list.append(
-      Sample(source=source, usage=usage, annotations=annotations_list, inference_loc=inference_loc))
+      Sample(source=source, usage=usage, annotations=annotations_list, inference_loc=inference_loc, id=id))
 
   for i in range(9):
+    id = "XGDVGS" + str(i)
     size = size + 1
     source = "s3://obs-ma/test/classification/datafiles/1_1550650984970_" + str(i) + ".jpg"
     usage = "TRAIN"
     annotations_list = []
     inference_loc = "s3://obs-ma/test/classification/datafiles/1_1550650984970_" + str(i) + ".txt"
     sample_list.append(
-      Sample(source=source, usage=usage, annotations=annotations_list, inference_loc=inference_loc))
+      Sample(source=source, usage=usage, annotations=annotations_list, inference_loc=inference_loc, id=id))
   return DataSet(sample=sample_list, size=size)
 
 

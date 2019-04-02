@@ -30,6 +30,7 @@ annotation_annotated_by2 = "annotated_by"
 source = "source"
 size = "size"
 usage = "usage"
+id = "id"
 inference_loc = "inference-loc"
 inference_loc2 = "inference_loc"
 
