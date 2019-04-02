@@ -154,7 +154,8 @@ public class Manifest {
     Sample sample = new Sample(getString(jObject, SOURCE),
         getString(jObject, FiledName.USAGE),
         getString(jObject, FiledName.INFERENCE_LOC),
-        parseAnnotations(getJSONArray(jObject, FiledName.ANNOTATIONS))
+        parseAnnotations(getJSONArray(jObject, FiledName.ANNOTATIONS)),
+        getString(jObject, FiledName.ID)
     );
     return sample;
   }

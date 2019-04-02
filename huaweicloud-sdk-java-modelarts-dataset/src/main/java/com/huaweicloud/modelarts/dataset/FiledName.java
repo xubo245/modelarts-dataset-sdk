@@ -22,6 +22,7 @@ public class FiledName {
   public static String SOURCE = "source";
   public static String USAGE = "usage";
   public static String INFERENCE_LOC = "inference_loc";
+  public static String ID = "id";
   public static String ANNOTATIONS = "annotation";
   public static String NAME = "name";
 

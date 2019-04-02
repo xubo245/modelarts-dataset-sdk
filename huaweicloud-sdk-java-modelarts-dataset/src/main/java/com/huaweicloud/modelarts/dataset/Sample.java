@@ -23,15 +23,33 @@ import java.util.List;
 public class Sample {
   /**
    * source path of raw data
+   * Mandatory field
    */
   private String source;
 
   /**
    * usage of this sample, like "TRAIN", "EVAL", "TEST", "inference"
+   * Optional field
    */
   private String usage;
+
+  /**
+   * inference location
+   * Optional field
+   */
   private String inference_loc;
+
+  /**
+   * annotation list
+   * Optional field
+   */
   private List<Annotation> annotations;
+
+  /**
+   * sample id
+   * Optional field
+   */
+  private String id;
 
   public Sample() {
   }
@@ -40,11 +58,12 @@ public class Sample {
     this.source = source;
   }
 
-  public Sample(String source, String usage, String inference_loc, List<Annotation> annotations) {
+  public Sample(String source, String usage, String inference_loc, List<Annotation> annotations, String id) {
     this.source = source;
     this.usage = usage;
     this.inference_loc = inference_loc;
     this.annotations = annotations;
+    this.id = id;
   }
 
   public String getSource() {
@@ -77,5 +96,13 @@ public class Sample {
 
   public void setAnnotations(List<Annotation> annotations) {
     this.annotations = annotations;
+  }
+
+  public String getId() {
+    return id;
+  }
+
+  public void setId(String id) {
+    this.id = id;
   }
 }

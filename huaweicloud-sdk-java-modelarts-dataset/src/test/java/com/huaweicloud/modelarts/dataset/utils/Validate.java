@@ -84,6 +84,7 @@ public class Validate {
       Sample sample = sampleList.get(i);
       assert sample.getSource().startsWith("s3://obs-ma/test/classification/datafiles");
       assertEquals(sample.getInference_loc(), null);
+      assert sample.getId().startsWith("XGDVG");
       assert (sample.getUsage().equalsIgnoreCase("TRAIN") || sample.getUsage().equalsIgnoreCase("INFERENCE"));
       List<Annotation> annotationList = sample.getAnnotations();
       assert (2 == annotationList.size() || 1 == annotationList.size());
@@ -105,7 +106,7 @@ public class Validate {
     }
   }
 
-  public static void validateDetectonSimple(Dataset dataset) {
+  public static void validateDetectionSimple(Dataset dataset) {
     assertEquals(dataset.getSize(), 8);
     List<Sample> sampleList = dataset.getSamples();
     assertEquals(sampleList.size(), 8);

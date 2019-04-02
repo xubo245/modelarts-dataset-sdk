@@ -45,14 +45,14 @@ public class ManifestTest extends TestCase {
   public void testParseManifestDetectionSimple() throws Exception {
     String path = this.getClass().getResource("/").getPath() + "../../../resources/detect-test-xy-V201902220951335133.manifest";
     Dataset dataset = parseManifest(path);
-    validateDetectonSimple(dataset);
+    validateDetectionSimple(dataset);
     System.out.println("testParseManifestDetectionSimple Success");
   }
 
   public void testParseManifestDetectionMultiple() throws Exception {
     String path = this.getClass().getResource("/").getPath() + "../../../resources/detect-multi-xy-V201902220951335133.manifest";
     Dataset dataset = parseManifest(path);
-    validateDetectonSimple(dataset);
+    validateDetectionSimple(dataset);
     System.out.println("testParseManifestDetectionMultiple Success");
   }
 }
