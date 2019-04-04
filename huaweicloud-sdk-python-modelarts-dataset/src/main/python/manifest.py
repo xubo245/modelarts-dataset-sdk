@@ -16,7 +16,6 @@
 import json
 
 import field_name
-from Encoder import ManifestEncoder
 from file import is_local, save
 from file import read
 
@@ -82,7 +81,7 @@ def parse_manifest(manifest_path, access_key=None, secret_key=None, end_point=No
         size = size + 1
         text = json.loads(line)
         source = text.get(field_name.source)
-        assert None != source
+        assert source is not None
         usage = text.get(field_name.usage)
         id = text.get(field_name.id)
         annotations = text.get(field_name.annotation)
@@ -145,18 +144,73 @@ class DataSet(object):
     """
     return self.sample
 
+  def put(self, sample_json, key, value):
+    """
+    put key and value to sample_json if value is not None
+    :return sample_json
+    Mandatory field
+    """
+    if value is not None:
+      sample_json[key] = value
+    return sample_json
+
+  def annotations_to_json(self, annotations):
+    """
+    convert annotations to json
+    :return annotation json
+    Mandatory field
+    """
+    annotations_json = []
+    annotation_json = {}
+    if annotations is None:
+      return None
+    for annotation in annotations:
+      self.put(annotation_json, field_name.annotation_name, annotation.get_name())
+      self.put(annotation_json, field_name.annotation_loc, annotation.get_loc())
+      self.put(annotation_json, field_name.annotation_type, annotation.get_type())
+      self.put(annotation_json, field_name.annotation_confidence, annotation.get_confidence())
+      self.put(annotation_json, field_name.annotation_property, annotation.get_property())
+      self.put(annotation_json, field_name.annotation_hard, annotation.get_hard())
+      self.put(annotation_json, field_name.annotation_annotated_by, annotation.get_annotated_by())
+      self.put(annotation_json, field_name.annotation_creation_time, annotation.get_creation_time())
+      self.put(annotation_json, field_name.annotation_format, annotation.get_annotation_format())
+      annotations_json.append(annotation_json)
+    return annotations_json
+
+  def toJSON(self, sample):
+    """
+    convert sample to json
+    :param sample: sample object of dataset
+    :return: sample json
+    """
+    sample_json = {}
+    self.put(sample_json, field_name.id, sample.get_id())
+    self.put(sample_json, field_name.source, sample.get_source())
+    self.put(sample_json, field_name.usage, sample.get_usage())
+    self.put(sample_json, field_name.inference_loc, sample.get_inference_loc())
+    self.put(sample_json, field_name.annotation, self.annotations_to_json(sample.get_annotations()))
+    return sample_json;
+
   def save(self, path, *args):
+    """
+    save dataset to local or OBS
+    :param path: manifest output path
+    :param args: ak,sk,endpoint
+    :return: None
+    """
     if args.__len__() < 1:
       for sample in self.get_sample_list():
         with open(path, "a") as f_obj:
-          json.dump(sample, f_obj, cls=ManifestEncoder)
+          value = self.toJSON(sample);
+          json.dump(value, f_obj)
           f_obj.write('\n')
     else:
       if (args.__len__() < 3):
         raise ValueError("please input OBS path, ak, sk and endpoint.")
       manifest_json = []
       for sample in self.get_sample_list():
-        manifest_json.append(json.dumps(sample, cls=ManifestEncoder))
+        value = self.toJSON(sample);
+        manifest_json.append(json.dumps(value))
       save(manifest_json, path, args[0], args[1], args[2])
 
 
@@ -206,11 +260,12 @@ class Sample(object):
 class Annotation:
 
   def __init__(self, name=None, type=None, loc=None, property=None, confidence=None, creation_time=None,
-               annotated_by=None, annotation_format=None):
+               annotated_by=None, annotation_format=None, hard=None):
     self.name = name
     self.type = type
     self.annotation_loc = loc
     self.property = property
+    self.hard = hard
     self.confidence = confidence
     self.creation_time = creation_time
     self.annotated_by = annotated_by
@@ -244,6 +299,13 @@ class Annotation:
     Optional field
     """
     return self.property
+
+  def get_hard(self):
+    """
+    :return set true if it's hard annotation, set false  if it's not hard annotation
+    Optional field
+    """
+    return self.hard
 
   def get_confidence(self):
     """

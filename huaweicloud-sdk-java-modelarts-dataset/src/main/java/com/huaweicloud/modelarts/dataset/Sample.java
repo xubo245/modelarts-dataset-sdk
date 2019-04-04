@@ -37,7 +37,7 @@ public class Sample {
    * inference location
    * Optional field
    */
-  private String inference_loc;
+  private String inferenceLoc;
 
   /**
    * annotation list
@@ -58,10 +58,10 @@ public class Sample {
     this.source = source;
   }
 
-  public Sample(String source, String usage, String inference_loc, List<Annotation> annotations, String id) {
+  public Sample(String source, String usage, String inferenceLoc, List<Annotation> annotations, String id) {
     this.source = source;
     this.usage = usage;
-    this.inference_loc = inference_loc;
+    this.inferenceLoc = inferenceLoc;
     this.annotations = annotations;
     this.id = id;
   }
@@ -82,12 +82,12 @@ public class Sample {
     this.usage = usage;
   }
 
-  public String getInference_loc() {
-    return inference_loc;
+  public String getInferenceLoc() {
+    return inferenceLoc;
   }
 
-  public void setInference_loc(String inference_loc) {
-    this.inference_loc = inference_loc;
+  public void setInferenceLoc(String inferenceLoc) {
+    this.inferenceLoc = inferenceLoc;
   }
 
   public List<Annotation> getAnnotations() {
@@ -104,5 +104,16 @@ public class Sample {
 
   public void setId(String id) {
     this.id = id;
+  }
+
+  @Override
+  public String toString() {
+    return "Sample{" +
+        "source='" + source + '\'' +
+        ", usage='" + usage + '\'' +
+        ", inferenceLoc='" + inferenceLoc + '\'' +
+        ", annotations=" + annotations +
+        ", id='" + id + '\'' +
+        '}';
   }
 }

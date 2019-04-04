@@ -86,10 +86,10 @@ def main(argv):
   if argv.__len__() < 2:
     path1 = os.path.abspath("../../../../") + "/resources/classification-xy-V201902220937263726.manifest"
     path2 = os.path.abspath("../../../../") + "/resources/classification-multi-xy-V201902220937263726.manifest"
-    # test_single_default(path1)
-    # test_multi_default(path2)
-    # test_single_exactly_match_type(path1)
-    # test_multi_exactly_match_type(path2)
+    test_single_default(path1)
+    test_multi_default(path2)
+    test_single_exactly_match_type(path1)
+    test_multi_exactly_match_type(path2)
 
     test_single_default_usage(path1)
     test_multi_default_usage(path2)

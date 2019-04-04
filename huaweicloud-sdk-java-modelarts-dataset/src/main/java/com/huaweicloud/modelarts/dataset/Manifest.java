@@ -19,6 +19,7 @@ import com.obs.services.ObsClient;
 import com.obs.services.model.ObsObject;
 import org.apache.log4j.Logger;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.*;
@@ -118,6 +119,27 @@ public class Manifest {
   }
 
   /**
+   * get json object by key
+   * For compatible the property
+   *
+   * @param jsonObject json object
+   * @param key        key
+   * @return true json object if the result is json object, empty json object if it has exception
+   */
+  public static JSONObject getJSONObject(JSONObject jsonObject, String key) {
+    if (jsonObject.isNull(key)) {
+      return null;
+    } else {
+      try {
+        return jsonObject.getJSONObject(key);
+      } catch (JSONException e) {
+        LOGGER.warn("It should be json object");
+        return new JSONObject();
+      }
+    }
+  }
+
+  /**
    * parse annotation by json Array
    *
    * @param jsonArray json Array
@@ -133,7 +155,7 @@ public class Manifest {
       annotationList.add(new Annotation(getString(jsonObject, NAME),
           getString(jsonObject, ANNOTATION_TYPE),
           getString(jsonObject, ANNOTATION_LOC),
-          getString(jsonObject, ANNOTATION_PROPERTY),
+          getJSONObject(jsonObject, ANNOTATION_PROPERTY),
           getDouble(jsonObject, ANNOTATION_CONFIDENCE),
           getString(jsonObject, ANNOTATION_CREATION_TIME),
           getString(jsonObject, ANNOTATION_ANNOTATED_BY),

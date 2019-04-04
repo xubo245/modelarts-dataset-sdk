@@ -15,49 +15,50 @@
 import os
 import sys
 
-import manifest_test_detection
+import manifest
 from manifest import Annotation, Sample, DataSet
 
 
 def create_manifest():
   size = 0;
   sample_list = []
-  for i in range(8):
+  for i in range(19):
     size = size + 1
-    source = "s3://obs-ma/test/label-0220/datafiles/1 (15)_1550632618199" + str(i) + ".jpg"
-    usage = "TRAIN"
-    inference_loc = "s3://obs-ma/test/label-0220/datafiles/1 (15)_1550632618199" + str(i) + ".txt"
-    annotations_list = []
-
-    for j in range(1):
-      annotation_type = "modelarts/object_detection"
-      annotation_loc = "s3://path/manifest/data/2007_000027_" + str(i) + ".xml"
-      annotation_creation_time = "2019-02-20 03:16:58"
-      annotation_format = "PASCAL VOC"
-      annotated_by = "human"
-      annotations_list.append(
-        Annotation(type=annotation_type, loc=annotation_loc,
-                   creation_time=annotation_creation_time,
-                   annotated_by=annotated_by, annotation_format=annotation_format))
+    source = "s3://obs-ma/test/classification/datafiles/1_1550650984970_" + str(i) + ".jpg"
+    inference_loc = "s3://obs-ma/test/classification/datafiles/1_1550650984970_" + str(i) + ".txt"
     sample_list.append(
-      Sample(source=source, usage=usage, annotations=annotations_list, inference_loc=inference_loc))
+      Sample(source=source, inference_loc=inference_loc))
   return DataSet(sample=sample_list, size=size)
 
 
+def validate(data_set):
+  assert data_set.get_size() > 0
+  data_objects = data_set.get_sample_list()
+  for data_object in data_objects:
+    assert str(data_object.get_source()).__contains__("s3://obs-ma/test/classification/datafiles/")
+    assert str(data_object.get_source()).__contains__(".jpg")
+
+    inference_loc = data_object.get_inference_loc()
+    assert str(inference_loc).startswith("s3://obs-ma/test/classification/datafiles/1_1550650984970")
+
+
 def main(argv):
-  path = os.path.abspath('../../../../') + "/resources/detect-test-xy-V201902220951335133_2.manifest"
+  path = os.path.abspath('../../../../') + "/resources/classification-xy-V201902220937263726_4.manifest"
   dataset = create_manifest()
   if argv.__len__() < 2:
     dataset.save(path)
     para = []
     para.append(path)
-    manifest_test_detection.main(para)
+    data_set = manifest.parse_manifest(path)
+    validate(data_set)
   else:
     path2 = argv[1]
     ak = argv[2]
     sk = argv[3]
     endpoint = argv[4]
     dataset.save(path2, ak, sk, endpoint)
+    data_set = manifest.parse_manifest(path2, ak, sk, endpoint)
+    validate(data_set)
 
 
 if __name__ == '__main__':

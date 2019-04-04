@@ -22,6 +22,7 @@ import com.huaweicloud.modelarts.dataset.Sample;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class Validate {
   public static void validateClassification(Dataset dataset) {
@@ -31,17 +32,19 @@ public class Validate {
     for (int i = 0; i < sampleList.size(); i++) {
       Sample sample = sampleList.get(i);
       assert sample.getSource().startsWith("s3://obs-ma/test/classification/datafiles");
-      assertEquals(sample.getInference_loc(), null);
+      assertEquals(sample.getInferenceLoc(), null);
       assertEquals(sample.getUsage(), "TRAIN");
       List<Annotation> annotationList = sample.getAnnotations();
       assertEquals(annotationList.size(), 1);
+      String sampleString = sample.toString();
       for (int j = 0; j < annotationList.size(); j++) {
         Annotation annotation = annotationList.get(j);
+        String anno = annotation.toString();
         assert ("Cat" == annotation.getName() || "Dog" == annotation.getName());
         assertEquals(annotation.getType(), "modelarts/image_classification");
         assertEquals(annotation.getAnnotationLoc(), null);
         // TODO: validate the property with value
-        assertEquals(annotation.getProperty(), "[{}]");
+        assert (annotation.getProperty().isEmpty());
         assertEquals(annotation.getConfidence(), 0.8, 0);
         assert (annotation.getCreationTime().startsWith("2019-02-20 08:23"));
         assertEquals(annotation.getAnnotatedBy(), "human");
@@ -57,7 +60,7 @@ public class Validate {
     for (int i = 0; i < sampleList.size(); i++) {
       Sample sample = sampleList.get(i);
       assert sample.getSource().startsWith("s3://obs-ma/test/classification/datafiles");
-      assertEquals(sample.getInference_loc(), null);
+      assertEquals(sample.getInferenceLoc(), null);
       assertEquals(sample.getUsage(), "TRAIN");
       List<Annotation> annotationList = sample.getAnnotations();
       assert (2 == annotationList.size() || 1 == annotationList.size());
@@ -67,7 +70,7 @@ public class Validate {
         assertEquals(annotation.getType(), "modelarts/image_classification");
         assertEquals(annotation.getAnnotationLoc(), null);
         // TODO: validate the property with value
-        assertEquals(annotation.getProperty(), "[{}]");
+        assertNotNull(annotation.getProperty());
         assertEquals(annotation.getConfidence(), 0.8, 0);
         assert (annotation.getCreationTime().startsWith("2019-02-20 08:23"));
         assertEquals(annotation.getAnnotatedBy(), "human");
@@ -83,7 +86,7 @@ public class Validate {
     for (int i = 0; i < sampleList.size(); i++) {
       Sample sample = sampleList.get(i);
       assert sample.getSource().startsWith("s3://obs-ma/test/classification/datafiles");
-      assertEquals(sample.getInference_loc(), null);
+      assertEquals(sample.getInferenceLoc(), null);
       assert sample.getId().startsWith("XGDVG");
       assert (sample.getUsage().equalsIgnoreCase("TRAIN") || sample.getUsage().equalsIgnoreCase("INFERENCE"));
       List<Annotation> annotationList = sample.getAnnotations();
@@ -96,7 +99,7 @@ public class Validate {
               || annotation.getType().equalsIgnoreCase("modelarts/image_classification"));
           assert (annotation.getAnnotationLoc().startsWith("s3://path/manifest/data/2007_0"));
           // TODO: validate the property with value
-          assert (null == annotation.getProperty() || annotation.getProperty().equalsIgnoreCase("[{}]"));
+          assert (null == annotation.getProperty() || annotation.getProperty().isEmpty());
           assert (0.8 == annotation.getConfidence() || 0 == annotation.getConfidence());
           assert (annotation.getCreationTime().startsWith("2019-02-20 08:23"));
           assertEquals(annotation.getAnnotatedBy(), "human");
@@ -113,7 +116,7 @@ public class Validate {
     for (int i = 0; i < sampleList.size(); i++) {
       Sample sample = sampleList.get(i);
       assert sample.getSource().startsWith("s3://obs-ma/test/classification/datafiles");
-      assertEquals(sample.getInference_loc(), null);
+      assertEquals(sample.getInferenceLoc(), null);
       assertEquals(sample.getUsage(), "TRAIN");
       List<Annotation> annotationList = sample.getAnnotations();
       assert (1 == annotationList.size());

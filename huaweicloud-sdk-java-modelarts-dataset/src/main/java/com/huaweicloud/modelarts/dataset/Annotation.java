@@ -15,6 +15,12 @@
 
 package com.huaweicloud.modelarts.dataset;
 
+import org.json.JSONObject;
+
+import java.util.LinkedHashMap;
+
+import static com.huaweicloud.modelarts.dataset.FiledName.*;
+
 /**
  * Annotation, including name for classification, annotationLoc for object detection and so on.
  */
@@ -43,7 +49,13 @@ public class Annotation {
    * annotation property, like the color of cat
    * Optional field
    */
-  private String property;
+  private JSONObject property;
+
+  /**
+   * whether is hard annotation
+   * Optional field
+   */
+  private boolean hard;
 
   /**
    * Confidence for annotation that was annotated by machine
@@ -82,7 +94,7 @@ public class Annotation {
     this.name = name;
   }
 
-  public Annotation(String name, String type, String annotationLoc, String property, double confidence, String creationTime, String annotatedBy, String annotationFormat) {
+  public Annotation(String name, String type, String annotationLoc, JSONObject property, double confidence, String creationTime, String annotatedBy, String annotationFormat) {
     this.name = name;
     this.type = type;
     this.annotationLoc = annotationLoc;
@@ -91,6 +103,18 @@ public class Annotation {
     this.creationTime = creationTime;
     this.annotatedBy = annotatedBy;
     this.annotationFormat = annotationFormat;
+  }
+
+  public Annotation(String name, String type, String annotationLoc, JSONObject property, double confidence, String creationTime, String annotatedBy, String annotationFormat, boolean hard) {
+    this.name = name;
+    this.type = type;
+    this.annotationLoc = annotationLoc;
+    this.property = property;
+    this.confidence = confidence;
+    this.creationTime = creationTime;
+    this.annotatedBy = annotatedBy;
+    this.annotationFormat = annotationFormat;
+    this.hard = hard;
   }
 
   public String getName() {
@@ -117,11 +141,11 @@ public class Annotation {
     this.annotationLoc = annotationLoc;
   }
 
-  public String getProperty() {
+  public JSONObject getProperty() {
     return property;
   }
 
-  public void setProperty(String property) {
+  public void setProperty(JSONObject property) {
     this.property = property;
   }
 
@@ -155,5 +179,28 @@ public class Annotation {
 
   public void setAnnotationFormat(String annotationFormat) {
     this.annotationFormat = annotationFormat;
+  }
+
+  public boolean isHard() {
+    return hard;
+  }
+
+  public void setHard(boolean hard) {
+    this.hard = hard;
+  }
+
+  @Override
+  public String toString() {
+    return "Annotation{" +
+        "name='" + name + '\'' +
+        ", type='" + type + '\'' +
+        ", annotationLoc='" + annotationLoc + '\'' +
+        ", property=" + property +
+        ", hard=" + hard +
+        ", confidence=" + confidence +
+        ", creationTime='" + creationTime + '\'' +
+        ", annotatedBy='" + annotatedBy + '\'' +
+        ", annotationFormat='" + annotationFormat + '\'' +
+        '}';
   }
 }

@@ -33,6 +33,7 @@ public class FiledName {
   public static String ANNOTATION_FORMAT2 = "annotation_format";
   public static String ANNOTATION_NAME = "name";
   public static String ANNOTATION_PROPERTY = "property";
+  public static String ANNOTATION_HARD = "hard";
   public static String ANNOTATION_CONFIDENCE = "confidence";
   public static String ANNOTATION_CREATION_TIME = "creation-time";
   public static String ANNOTATION_CREATION_TIME2 = "creation_time";

@@ -19,10 +19,10 @@ import manifest
 
 
 def validate(data_set):
-  assert data_set.get_size() > 18
+  assert data_set.get_size() == 10
   data_objects = data_set.get_sample_list()
   for data_object in data_objects:
-    assert str(data_object.get_source()).__contains__("s3://obs-ma/test/classification/datafiles/")
+    assert str(data_object.get_source()).__contains__("s3://modelartscarbon/flowers/")
     assert str(data_object.get_source()).__contains__(".jpg")
     assert data_object.get_usage() == "TRAIN"
 
@@ -35,19 +35,20 @@ def validate(data_set):
       assert annotation_type == "modelarts/image_classification"
 
       annotation_name = annotation.get_name()
-      assert (annotation_name == "Cat" or annotation_name == "Dog")
+      assert (annotation_name == "sunflowers" or annotation_name == "daisy"
+              or annotation_name == "tulips" or annotation_name == "dandelion")
 
       annotation_loc = annotation.get_loc()
       assert annotation_loc is None or str(annotation_loc).__contains__()
 
       confidence = annotation.get_confidence()
-      assert confidence == 0.8
+      assert confidence is None
 
       annotation_property = annotation.get_property()
-      assert annotation_property == "[{}]" or annotation_property is None
+      assert annotation_property is not None
 
       annotation_create_time = annotation.get_creation_time()
-      assert str(annotation_create_time).__contains__("2019-02-20 08:2")
+      assert str(annotation_create_time).__contains__("2019-03-30")
 
       annotation_annotated_by = annotation.get_annotated_by()
       assert annotation_annotated_by == "human"
@@ -62,7 +63,7 @@ def main(argv):
     if str(argv[0]).endswith(".manifest"):
       path = argv[0]
     else:
-      path = os.path.abspath('../../../../') + "/resources/classification-xy-V201902220937263726.manifest"
+      path = os.path.abspath('../../../../') + "/resources/V002.manifest"
     data_set = manifest.parse_manifest(path)
     validate(data_set)
   elif argv.__len__() < 3:

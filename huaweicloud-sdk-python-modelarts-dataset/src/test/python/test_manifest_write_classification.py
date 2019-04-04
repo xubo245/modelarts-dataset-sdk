@@ -15,7 +15,7 @@
 import os
 import sys
 
-import manifest_test_classification
+import test_manifest_classification
 from manifest import Annotation, Sample, DataSet
 
 
@@ -37,13 +37,14 @@ def create_manifest():
         annotation_name = "Dog"
       annotation_creation_time = "2019-02-20 08:23:06"
       annotation_format = "manifest"
+      annotation_property = {"color": "black"}
       annotation_confidence = 0.8
       annotated_by = "human"
       annotations_list.append(
         Annotation(name=annotation_name, type=annotation_type,
                    confidence=annotation_confidence,
                    creation_time=annotation_creation_time,
-                   annotated_by=annotated_by, annotation_format=annotation_format))
+                   annotated_by=annotated_by, annotation_format=annotation_format, property=annotation_property))
     sample_list.append(
       Sample(source=source, usage=usage, annotations=annotations_list, inference_loc=inference_loc))
   return DataSet(sample=sample_list, size=size)
@@ -56,7 +57,7 @@ def main(argv):
     dataset.save(path)
     para = []
     para.append(path)
-    manifest_test_classification.main(para)
+    test_manifest_classification.main(para)
   else:
     path2 = argv[1]
     ak = argv[2]
