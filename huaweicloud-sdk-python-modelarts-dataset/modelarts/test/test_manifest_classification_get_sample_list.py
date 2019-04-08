@@ -15,8 +15,7 @@
 import os
 import sys
 
-import field_name
-import manifest
+from modelarts import manifest, field_name
 
 
 def check_data(sample_list):
@@ -53,7 +52,6 @@ def test_multi_default(path, *args):
   check_data(sample_list)
   print("Success: test_multi_default")
 
-
 def test_multi_default_usage(path, *args):
   sample_list, label_type = manifest.get_sample_list(path, "image_classification", False, usage="train", *args)
   assert (label_type == field_name.multi_lable)
@@ -84,8 +82,8 @@ def test_multi_exactly_match_type_error(path, *args):
 
 def main(argv):
   if argv.__len__() < 2:
-    path1 = os.path.abspath("../../../../") + "/resources/classification-xy-V201902220937263726.manifest"
-    path2 = os.path.abspath("../../../../") + "/resources/classification-multi-xy-V201902220937263726.manifest"
+    path1 = os.path.abspath("../../../") + "/resources/classification-xy-V201902220937263726.manifest"
+    path2 = os.path.abspath("../../../") + "/resources/classification-multi-xy-V201902220937263726.manifest"
     test_single_default(path1)
     test_multi_default(path2)
     test_single_exactly_match_type(path1)
@@ -103,11 +101,8 @@ def main(argv):
     sk = argv[2]
     endpoint = argv[3]
     test_single_default(path1, ak, sk, endpoint)
-
     test_multi_default(path2, ak, sk, endpoint)
-
     test_single_exactly_match_type(path1, ak, sk, endpoint)
-
     test_multi_exactly_match_type(path2, ak, sk, endpoint)
     print("test OBS Success")
 

@@ -15,12 +15,12 @@
 import os
 import sys
 
-import test_manifest_detection
-from manifest import Annotation, Sample, DataSet
+from modelarts.test import test_manifest_detection
+from modelarts.manifest import Annotation, Sample, DataSet
 
 
 def create_manifest():
-  size = 0;
+  size = 0
   sample_list = []
   for i in range(8):
     size = size + 1
@@ -45,7 +45,7 @@ def create_manifest():
 
 
 def main(argv):
-  path = os.path.abspath('../../../../') + "/resources/detect-test-xy-V201902220951335133_2.manifest"
+  path = os.path.abspath('../../../') + "/resources/detect-test-xy-V201902220951335133_2.manifest"
   dataset = create_manifest()
   if argv.__len__() < 2:
     dataset.save(path)

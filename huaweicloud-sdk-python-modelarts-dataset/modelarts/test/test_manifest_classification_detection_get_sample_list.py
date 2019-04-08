@@ -15,8 +15,7 @@
 import os
 import sys
 
-import field_name
-import manifest
+from modelarts import manifest, field_name
 
 
 def check_data(sample_list):
@@ -99,7 +98,7 @@ def test_multi_exactly_match_type_detect(path, *args):
 
 def main(argv):
   if argv.__len__() < 2:
-    path2 = os.path.abspath("../../../../") + "/resources/classification-detection-multi-xy-V201902220937263726.manifest"
+    path2 = os.path.abspath("../../../") + "/resources/classification-detection-multi-xy-V201902220937263726.manifest"
     test_multi_default(path2)
     test_multi_exactly_match_type(path2)
     test_multi_exactly_match_type_detect(path2)

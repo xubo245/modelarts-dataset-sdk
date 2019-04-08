@@ -15,8 +15,7 @@
 import os
 import sys
 
-import field_name
-import manifest
+from modelarts import manifest, field_name
 
 
 def check_data(sample_list):
@@ -63,8 +62,8 @@ def test_single_default_from_obs(path, *args):
 
 def main(argv):
   if argv.__len__() < 2:
-    path1 = os.path.abspath("../../../../") + "/resources/detect-test-xy-V201902220951335133.manifest"
-    path2 = os.path.abspath("../../../../") + "/resources/detect-multi-xy-V201902220951335133.manifest"
+    path1 = os.path.abspath("../../../") + "/resources/detect-test-xy-V201902220951335133.manifest"
+    path2 = os.path.abspath("../../../") + "/resources/detect-multi-xy-V201902220951335133.manifest"
     test_single_default(path1)
 
     test_multi_default(path2)

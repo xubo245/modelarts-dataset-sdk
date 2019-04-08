@@ -15,7 +15,7 @@
 import os
 import sys
 
-import manifest
+from modelarts import manifest
 
 
 def validate(data_set):
@@ -62,7 +62,7 @@ def main(argv):
     if str(argv[0]).endswith(".manifest"):
       path = argv[0]
     else:
-      path = os.path.abspath('../../../../') + "/resources/classification-xy-V201902220937263726.manifest"
+      path = os.path.abspath('../../../') + "/resources/classification-xy-V201902220937263726.manifest"
     data_set = manifest.parse_manifest(path)
     validate(data_set)
   elif argv.__len__() < 3:

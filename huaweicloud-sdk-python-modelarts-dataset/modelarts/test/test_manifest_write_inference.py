@@ -15,8 +15,7 @@
 import os
 import sys
 
-import manifest
-from manifest import Annotation, Sample, DataSet
+from modelarts.manifest import Sample, DataSet, parse_manifest
 
 
 def create_manifest():
@@ -43,13 +42,13 @@ def validate(data_set):
 
 
 def main(argv):
-  path = os.path.abspath('../../../../') + "/resources/classification-xy-V201902220937263726_4.manifest"
+  path = os.path.abspath('../../../') + "/resources/classification-xy-V201902220937263726_4.manifest"
   dataset = create_manifest()
   if argv.__len__() < 2:
     dataset.save(path)
     para = []
     para.append(path)
-    data_set = manifest.parse_manifest(path)
+    data_set = parse_manifest(path)
     validate(data_set)
   else:
     path2 = argv[1]
@@ -57,7 +56,7 @@ def main(argv):
     sk = argv[3]
     endpoint = argv[4]
     dataset.save(path2, ak, sk, endpoint)
-    data_set = manifest.parse_manifest(path2, ak, sk, endpoint)
+    data_set = parse_manifest(path2, ak, sk, endpoint)
     validate(data_set)
 
 
