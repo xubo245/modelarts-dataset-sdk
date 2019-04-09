@@ -36,10 +36,8 @@ public class Validate {
       assertEquals(sample.getUsage(), "TRAIN");
       List<Annotation> annotationList = sample.getAnnotations();
       assertEquals(annotationList.size(), 1);
-      String sampleString = sample.toString();
       for (int j = 0; j < annotationList.size(); j++) {
         Annotation annotation = annotationList.get(j);
-        String anno = annotation.toString();
         assert ("Cat" == annotation.getName() || "Dog" == annotation.getName());
         assertEquals(annotation.getType(), "modelarts/image_classification");
         assertEquals(annotation.getAnnotationLoc(), null);

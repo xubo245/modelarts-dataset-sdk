@@ -224,29 +224,36 @@ class DataSet(object):
     self.__put(sample_json, field_name.usage, sample.get_usage())
     self.__put(sample_json, field_name.inference_loc, sample.get_inference_loc())
     self.__put(sample_json, field_name.annotation, self.__annotations_to_json(sample.get_annotations()))
-    return sample_json;
+    return sample_json
 
-  def save(self, path, *args):
+  def save(self, path, access_key=None, secret_key=None, end_point=None, saveMode="w"):
     """
     save dataset to local or OBS
+    It will overwrite if the file path already exists.
+    Please check the file path before invoking this method
+
     :param path: manifest output path
     :param args: ak,sk,endpoint
     :return: None
     """
-    if args.__len__() < 1:
-      for sample in self.get_sample_list():
-        with open(path, "a") as f_obj:
-          value = self.__toJSON(sample);
+    if access_key is None and secret_key is None and end_point is None:
+      with open(path, saveMode) as f_obj:
+        for sample in self.get_sample_list():
+          value = self.__toJSON(sample)
           json.dump(value, f_obj)
           f_obj.write('\n')
+    elif access_key is None:
+      raise Exception("access_key is None")
+    elif secret_key is None:
+      raise Exception("secret_key is None")
+    elif end_point is None:
+      raise Exception("end_point is None")
     else:
-      if (args.__len__() < 3):
-        raise ValueError("please input OBS path, ak, sk and endpoint.")
       manifest_json = []
       for sample in self.get_sample_list():
-        value = self.__toJSON(sample);
+        value = self.__toJSON(sample)
         manifest_json.append(json.dumps(value))
-      save(manifest_json, path, args[0], args[1], args[2])
+      save(manifest_json, path, access_key=access_key, secret_key=secret_key, end_point=end_point)
 
 
 class Sample(object):

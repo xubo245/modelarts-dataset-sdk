@@ -48,6 +48,7 @@ prefix_s3 = "s3://"
 prefix_s3_upper = "S3://"
 
 separator = "/"
+newline_character = "\n"
 
 # Usage
 default_usage = "all"

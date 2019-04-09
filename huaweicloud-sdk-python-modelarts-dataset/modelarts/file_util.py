@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from modelarts.field_name import prefix_s3, prefix_s3_upper, s3, separator
+from modelarts.field_name import prefix_s3, prefix_s3_upper, s3, separator, newline_character
 from obs import *
 
 
@@ -90,20 +90,12 @@ def save(manifest_json, path, access_key, secret_key, end_point):
       long_conn_mode=True
     )
     bucket_name, file = __parser_path(path)
-    content = AppendObjectContent()
 
-    resp = obs_client.getObjectMetadata(bucket_name, file)
-    if resp.status < 300:
-      content.position = resp.body.nextPosition
-    for line in manifest_json:
-      content.content = line + "\n"
-      resp = obs_client.appendObject(bucket_name, file, content=content)
-      if resp.body is None:
-        resp = obs_client.appendObject(bucket_name, file, content=content)
-      if resp.body is None:
-        raise Exception("Failed,status: " + str(resp.status) + ", errorCode: " + str(resp.errorCode)
-                        + ", errorMessage: " + resp.errorMessage + " reason: " + resp.reason)
-      content.position = resp.body.nextPosition
-    return resp.body.buffer
+    resp = obs_client.putObject(bucket_name, file, content=newline_character.join(manifest_json))
+    if resp.status >= 300:
+      resp = obs_client.putObject(bucket_name, file, content=newline_character.join(manifest_json))
+    if resp.status >= 300:
+      raise Exception("Failed,status: " + str(resp.status) + ", errorCode: " + str(resp.erro)
+                      + ", errorMessage: " + resp.errorMessage + " reason: " + resp.reason)
   else:
     raise ValueError("Only support s3 now!")
