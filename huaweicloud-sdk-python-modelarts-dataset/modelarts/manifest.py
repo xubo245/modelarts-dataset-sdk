@@ -21,7 +21,8 @@ from modelarts.file_util import __read
 
 
 def get_sample_list(manifest_path, task_type, exactly_match_type=False, access_key=None,
-                    secret_key=None, end_point=None, usage=field_name.default_usage):
+                    secret_key=None, end_point=None, usage=field_name.default_usage, ssl_verify=False,
+                    max_retry_count=3, timeout=60):
   """
   get the sample list from manifest, support local and OBS path;
   If the exactly_match_type is True, then it will match the task type exactly;
@@ -37,10 +38,14 @@ def get_sample_list(manifest_path, task_type, exactly_match_type=False, access_k
   :param access_key: access key of OBS
   :param secret_key: secret key of OBS
   :param end_point: end point of OBS
+  :param ssl_verify: whether use ssl, set True if user want to verify certification, otherwise set False; default is False
+  :param max_retry_count: max retry count, default is 3
+  :param timeout: timeout [10,60], default is 60
   :param usage: usage of the sample, like "TRAIN", "EVAL", "TEST", "inference", "all", default value is all
   :return: data_list, label_type
   """
-  data_set = parse_manifest(manifest_path, access_key=access_key, secret_key=secret_key, end_point=end_point)
+  data_set = parse_manifest(manifest_path, access_key=access_key, secret_key=secret_key, end_point=end_point,
+                            ssl_verify=ssl_verify, max_retry_count=max_retry_count, timeout=timeout)
   sample_list = data_set.get_sample_list()
   data_list = []
   label_type = field_name.single_lable
@@ -77,7 +82,8 @@ def get_sample_list(manifest_path, task_type, exactly_match_type=False, access_k
   return data_list, label_type
 
 
-def parse_manifest(manifest_path, access_key=None, secret_key=None, end_point=None):
+def parse_manifest(manifest_path, access_key=None, secret_key=None, end_point=None, ssl_verify=False, max_retry_count=3,
+                   timeout=60):
   """
   user give the path of manifest file, it will return the dataset,
   including data object list, annotation list and so on after the manifest was parsed.
@@ -86,6 +92,9 @@ def parse_manifest(manifest_path, access_key=None, secret_key=None, end_point=No
   :param access_key: access key of OBS
   :param secret_key: secret key of OBS
   :param end_point: end point of OBS
+  :param ssl_verify: whether use ssl, set True if user want to verify certification, otherwise set False; default is False
+  :param max_retry_count: max retry count, default is 3
+  :param timeout: timeout [10,60], default is 60
   :return: data set of manifest
   """
 
@@ -135,7 +144,8 @@ def parse_manifest(manifest_path, access_key=None, secret_key=None, end_point=No
   else:
     if access_key is None or secret_key is None or end_point is None:
       raise ValueError("Please input ak, sk and endpoint")
-    data = __read(manifest_path, access_key=access_key, secret_key=secret_key, end_point=end_point)
+    data = __read(manifest_path, access_key=access_key, secret_key=secret_key, end_point=end_point,
+                  ssl_verify=ssl_verify, max_retry_count=max_retry_count, timeout=timeout)
     result = __getDataSet(data.decode().split("\n"))
     return result
 
@@ -226,14 +236,23 @@ class DataSet(object):
     self.__put(sample_json, field_name.annotation, self.__annotations_to_json(sample.get_annotations()))
     return sample_json
 
-  def save(self, path, access_key=None, secret_key=None, end_point=None, saveMode="w"):
+  def save(self, path, access_key=None, secret_key=None, end_point=None, saveMode="w", ssl_verify=False,
+           max_retry_count=3, timeout=60):
     """
     save dataset to local or OBS
     It will overwrite if the file path already exists.
     Please check the file path before invoking this method
 
     :param path: manifest output path
-    :param args: ak,sk,endpoint
+    :param access_key: access key of OBS
+    :param secret_key: secret key of OBS
+    :param end_point: end point of OBS
+    :param saveMode: default is "w", it will overwrite if file already exists.
+        User can set "a" if user want to append content to one file.
+        Can not append to a normal object.
+    :param ssl_verify: whether use ssl, set True if user want to verify certification, otherwise set False; default is False
+    :param max_retry_count: max retry count, default is 3
+    :param timeout: timeout [10,60], default is 60
     :return: None
     """
     if access_key is None and secret_key is None and end_point is None:
@@ -253,7 +272,8 @@ class DataSet(object):
       for sample in self.get_sample_list():
         value = self.__toJSON(sample)
         manifest_json.append(json.dumps(value))
-      save(manifest_json, path, access_key=access_key, secret_key=secret_key, end_point=end_point)
+      save(manifest_json, path, access_key=access_key, secret_key=secret_key, end_point=end_point,
+           saveMode=saveMode, ssl_verify=ssl_verify, max_retry_count=max_retry_count, timeout=timeout)
 
 
 class Sample(object):

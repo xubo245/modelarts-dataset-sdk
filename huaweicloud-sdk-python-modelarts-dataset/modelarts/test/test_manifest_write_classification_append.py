@@ -54,7 +54,7 @@ def main(argv):
   path = os.path.abspath('../../../') + "/resources/classification-xy-V201902220937263726_2.manifest"
   dataset = create_manifest()
   if argv.__len__() < 2:
-    dataset.save(path)
+    dataset.save(path, saveMode="a")
     para = []
     para.append(path)
     test_manifest_classification.main(para)
@@ -63,7 +63,15 @@ def main(argv):
     ak = argv[2]
     sk = argv[3]
     endpoint = argv[4]
-    dataset.save(path2, ak, sk, endpoint)
+    dataset.save(path2, ak, sk, endpoint, saveMode="a")
+    para = []
+    para.append(path2)
+    para.append(path2)
+    para.append(ak)
+    para.append(sk)
+    para.append(endpoint)
+    para.append(endpoint)
+    test_manifest_classification.main(para)
 
 
 if __name__ == '__main__':
