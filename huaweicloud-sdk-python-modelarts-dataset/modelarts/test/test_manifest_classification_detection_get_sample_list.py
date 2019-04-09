@@ -19,31 +19,31 @@ from modelarts import manifest, field_name
 
 
 def check_data(sample_list):
-  assert sample_list.__len__() == 5
+  assert len(sample_list) == 5
   for raw_data, label_list in sample_list:
     assert str(raw_data).startswith("s3://obs-ma/test/classification/datafiles")
-    assert label_list.__len__() == 1 or label_list.__len__() == 0
+    assert len(label_list) == 1 or len(label_list) == 0
 
 
 def check_data_usage_inference(sample_list):
-  assert sample_list.__len__() == 3
+  assert len(sample_list) == 3
   for raw_data, label_list in sample_list:
     assert str(raw_data).startswith("s3://obs-ma/test/classification/datafiles")
-    assert label_list.__len__() == 0
+    assert len(label_list) == 0
 
 
 def check_data_usage(sample_list):
-  assert sample_list.__len__() == 2
+  assert len(sample_list) == 2
   for raw_data, label_list in sample_list:
     assert str(raw_data).startswith("s3://obs-ma/test/classification/datafiles")
-    assert label_list.__len__() == 1
+    assert len(label_list) == 1
 
 
 def check_data_without_label(sample_list):
-  assert sample_list.__len__() == 5
+  assert len(sample_list) == 5
   for raw_data, label_list in sample_list:
     assert str(raw_data).startswith("s3://obs-ma/test/classification/datafiles")
-    assert label_list.__len__() == 0 or label_list.__len__() == 1
+    assert len(label_list) == 0 or len(label_list) == 1
 
 
 def test_multi_default(path, *args):
@@ -97,7 +97,7 @@ def test_multi_exactly_match_type_detect(path, *args):
 
 
 def main(argv):
-  if argv.__len__() < 2:
+  if len(argv) < 2:
     path2 = os.path.abspath("../../../") + "/resources/classification-detection-multi-xy-V201902220937263726.manifest"
     test_multi_default(path2)
     test_multi_exactly_match_type(path2)

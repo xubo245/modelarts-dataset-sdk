@@ -171,22 +171,22 @@ class DataSet(object):
   """
 
   def __init__(self, sample, size=None):
-    self.__sample = sample
-    self.__size = size
+    self._sample = sample
+    self._size = size
 
   def get_size(self):
     """
     :return size of the data set
     Optional field
     """
-    return self.__size
+    return self._size
 
   def get_sample_list(self):
     """
     :return a list of sample
     Mandatory field
     """
-    return self.__sample
+    return self._sample
 
   def __put(self, sample_json, key, value):
     """
@@ -278,74 +278,74 @@ class DataSet(object):
 
 class Sample(object):
   def __init__(self, source, annotations=None, usage=None, inference_loc=None, id=None):
-    self.__source = source
-    self.__usage = usage
-    self.__annotation = annotations
-    self.__inference_loc = inference_loc
-    self.__id = id
+    self._source = source
+    self._usage = usage
+    self._annotation = annotations
+    self._inference_loc = inference_loc
+    self._id = id
 
   def get_source(self):
     """
     :return "source" attribute
     Mandatory field
     """
-    return self.__source
+    return self._source
 
   def get_id(self):
     """
     :return "id" attribute, one of
     Optional field
     """
-    return self.__id
+    return self._id
 
   def get_usage(self):
     """
     :return "usage" attribute, one of
     Optional field
     """
-    return self.__usage
+    return self._usage
 
   def get_inference_loc(self):
     """
     :return "inference_loc" attribute, one of Optional field
     """
-    return self.__inference_loc
+    return self._inference_loc
 
   def get_annotations(self):
     """
     :return a list of class Annotation
     Optional field
     """
-    return self.__annotation
+    return self._annotation
 
 
 class Annotation:
 
   def __init__(self, name=None, type=None, loc=None, property=None, confidence=None, creation_time=None,
                annotated_by=None, annotation_format=None, hard=None):
-    self.__name = name
-    self.__type = type
-    self.__annotation_loc = loc
-    self.__property = property
-    self.__hard = hard
-    self.__confidence = confidence
-    self.__creation_time = creation_time
-    self.__annotated_by = annotated_by
-    self.__annotation_format = annotation_format
+    self._name = name
+    self._type = type
+    self._annotation_loc = loc
+    self._property = property
+    self._hard = hard
+    self._confidence = confidence
+    self._creation_time = creation_time
+    self._annotated_by = annotated_by
+    self._annotation_format = annotation_format
 
   def get_type(self):
     """
     :return type of dataset: modelarts/image_classification, modelarts/object_detection
     Optional field
     """
-    return self.__type
+    return self._type
 
   def get_name(self):
     """
     :return the name of this annotation, like "cat"
     Mandatory field if get_loc is None
     """
-    return self.__name
+    return self._name
 
   def get_loc(self):
     """
@@ -353,46 +353,46 @@ class Annotation:
     otherwise return null
     Mandatory field if get_name is None
     """
-    return self.__annotation_loc
+    return self._annotation_loc
 
   def get_property(self):
     """
     :return a KV pair list
     Optional field
     """
-    return self.__property
+    return self._property
 
   def get_hard(self):
     """
     :return set true if it's hard annotation, set false  if it's not hard annotation
     Optional field
     """
-    return self.__hard
+    return self._hard
 
   def get_confidence(self):
     """
     :return confidence of label
     Optional field
     """
-    return self.__confidence
+    return self._confidence
 
   def get_creation_time(self):
     """
     :return when this annotation is created
     Optional field
     """
-    return self.__creation_time
+    return self._creation_time
 
   def get_annotation_format(self):
     """
     :return when this annotation format
     Optional field
     """
-    return self.__annotation_format
+    return self._annotation_format
 
   def get_annotated_by(self):
     """
     :return who this annotation is created by
     Optional field
     """
-    return self.__annotated_by
+    return self._annotated_by

@@ -64,7 +64,7 @@ def create_manifest():
 def main(argv):
   path = os.path.abspath('../../../') + "/resources/classification-xy-V201902220937263726_3.manifest"
   dataset = create_manifest()
-  if argv.__len__() < 2:
+  if len(argv) < 2:
     dataset.save(path)
     para = []
     para.append(path)

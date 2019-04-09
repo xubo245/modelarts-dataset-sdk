@@ -19,10 +19,10 @@ from modelarts import manifest, field_name
 
 
 def check_data(sample_list):
-  assert sample_list.__len__() == 8
+  assert len(sample_list) == 8
   for raw_data, label_list in sample_list:
     assert str(raw_data).startswith("s3://obs-ma/test/label-0220/datafiles")
-    assert label_list.__len__() > 0
+    assert len(label_list) > 0
 
 
 def test_single_default(path, *args):
@@ -61,7 +61,7 @@ def test_single_default_from_obs(path, *args):
 
 
 def main(argv):
-  if argv.__len__() < 2:
+  if len(argv) < 2:
     path1 = os.path.abspath("../../../") + "/resources/detect-test-xy-V201902220951335133.manifest"
     path2 = os.path.abspath("../../../") + "/resources/detect-multi-xy-V201902220951335133.manifest"
     test_single_default(path1)

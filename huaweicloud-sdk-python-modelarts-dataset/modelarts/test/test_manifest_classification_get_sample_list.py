@@ -19,17 +19,17 @@ from modelarts import manifest, field_name
 
 
 def check_data(sample_list):
-  assert sample_list.__len__() == 19
+  assert len(sample_list) == 19
   for raw_data, label_list in sample_list:
     assert str(raw_data).startswith("s3://obs-ma/test/classification/datafiles")
-    assert label_list.__len__() > 0
+    assert len(label_list) > 0
 
 
 def check_data_without_label(sample_list):
-  assert sample_list.__len__() == 19
+  assert len(sample_list) == 19
   for raw_data, label_list in sample_list:
     assert str(raw_data).startswith("s3://obs-ma/test/classification/datafiles")
-    assert label_list.__len__() == 0
+    assert len(label_list) == 0
 
 
 def test_single_default(path, *args):
@@ -51,6 +51,7 @@ def test_multi_default(path, *args):
   assert (label_type == field_name.multi_lable)
   check_data(sample_list)
   print("Success: test_multi_default")
+
 
 def test_multi_default_usage(path, *args):
   sample_list, label_type = manifest.get_sample_list(path, "image_classification", False, usage="train", *args)
@@ -81,7 +82,7 @@ def test_multi_exactly_match_type_error(path, *args):
 
 
 def main(argv):
-  if argv.__len__() < 2:
+  if len(argv) < 2:
     path1 = os.path.abspath("../../../") + "/resources/classification-xy-V201902220937263726.manifest"
     path2 = os.path.abspath("../../../") + "/resources/classification-multi-xy-V201902220937263726.manifest"
     test_single_default(path1)

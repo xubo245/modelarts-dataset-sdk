@@ -19,7 +19,7 @@ from modelarts.manifest import Sample, DataSet, parse_manifest
 
 
 def create_manifest():
-  size = 0;
+  size = 0
   sample_list = []
   for i in range(19):
     size = size + 1
@@ -34,8 +34,8 @@ def validate(data_set):
   assert data_set.get_size() > 0
   data_objects = data_set.get_sample_list()
   for data_object in data_objects:
-    assert str(data_object.get_source()).__contains__("s3://obs-ma/test/classification/datafiles/")
-    assert str(data_object.get_source()).__contains__(".jpg")
+    assert "s3://obs-ma/test/classification/datafiles/" in data_object.get_source()
+    assert ".jpg" in data_object.get_source()
 
     inference_loc = data_object.get_inference_loc()
     assert str(inference_loc).startswith("s3://obs-ma/test/classification/datafiles/1_1550650984970")
@@ -44,7 +44,7 @@ def validate(data_set):
 def main(argv):
   path = os.path.abspath('../../../') + "/resources/classification-xy-V201902220937263726_4.manifest"
   dataset = create_manifest()
-  if argv.__len__() < 2:
+  if len(argv) < 2:
     dataset.save(path)
     para = []
     para.append(path)

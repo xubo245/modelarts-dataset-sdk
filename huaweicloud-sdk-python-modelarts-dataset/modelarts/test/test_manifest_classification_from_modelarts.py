@@ -22,8 +22,8 @@ def validate(data_set):
   assert data_set.get_size() == 10
   data_objects = data_set.get_sample_list()
   for data_object in data_objects:
-    assert str(data_object.get_source()).__contains__("s3://modelartscarbon/flowers/")
-    assert str(data_object.get_source()).__contains__(".jpg")
+    assert "s3://modelartscarbon/flowers/" in data_object.get_source()
+    assert ".jpg" in data_object.get_source()
     assert data_object.get_usage() == "TRAIN"
 
     annotations = data_object.get_annotations()
@@ -39,7 +39,7 @@ def validate(data_set):
               or annotation_name == "tulips" or annotation_name == "dandelion")
 
       annotation_loc = annotation.get_loc()
-      assert annotation_loc is None or str(annotation_loc).__contains__()
+      assert annotation_loc is None
 
       confidence = annotation.get_confidence()
       assert confidence is None
@@ -48,7 +48,7 @@ def validate(data_set):
       assert annotation_property is not None
 
       annotation_create_time = annotation.get_creation_time()
-      assert str(annotation_create_time).__contains__("2019-03-30")
+      assert "2019-03-30" in annotation_create_time
 
       annotation_annotated_by = annotation.get_annotated_by()
       assert annotation_annotated_by == "human"
@@ -59,14 +59,14 @@ def validate(data_set):
 
 
 def main(argv):
-  if argv.__len__() < 2:
+  if len(argv) < 2:
     if str(argv[0]).endswith(".manifest"):
       path = argv[0]
     else:
       path = os.path.abspath('../../../') + "/resources/V002.manifest"
     data_set = manifest.parse_manifest(path)
     validate(data_set)
-  elif argv.__len__() < 3:
+  elif len(argv) < 3:
     data_set = manifest.parse_manifest(argv[1])
     validate(data_set)
   else:

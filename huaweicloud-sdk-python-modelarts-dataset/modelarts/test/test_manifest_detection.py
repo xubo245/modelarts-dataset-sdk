@@ -23,8 +23,8 @@ def validate(data_set):
   data_objects = data_set.get_sample_list()
   for data_object in data_objects:
     source = data_object.get_source()
-    assert str(source).__contains__("s3://obs-ma/test/label-0220/datafiles/")
-    assert str(source).__contains__(".jpg")
+    assert "s3://obs-ma/test/label-0220/datafiles/" in source
+    assert ".jpg" in source
     usage = data_object.get_usage()
     assert usage == "TRAIN"
     annotations = data_object.get_annotations()
@@ -34,11 +34,11 @@ def validate(data_set):
       annotation_name = annotation.get_name()
       assert annotation_name is None
       annotation_loc = annotation.get_loc()
-      assert str(annotation_loc).__contains__("s3://path/manifest/data/2007_000027")
+      assert "s3://path/manifest/data/2007_000027" in annotation_loc
       annotation_property = annotation.get_property()
       assert None == annotation_property
       annotation_create_time = annotation.get_creation_time()
-      assert str(annotation_create_time).__contains__("2019-02-20 03:16")
+      assert "2019-02-20 03:16" in annotation_create_time
     assert annotation.get_annotation_format() == "PASCAL VOC"
     annotation_annotated_by = annotation.get_annotated_by()
     assert annotation_annotated_by == "human"
@@ -47,14 +47,14 @@ def validate(data_set):
 
 
 def main(argv):
-  if argv.__len__() < 2:
+  if len(argv) < 2:
     if str(argv[0]).endswith(".manifest"):
       path = argv[0]
     else:
       path = os.path.abspath('../../../') + "/resources/detect-test-xy-V201902220951335133.manifest"
     data_set = manifest.parse_manifest(path)
     validate(data_set)
-  elif argv.__len__() < 3:
+  elif len(argv) < 3:
     data_set = manifest.parse_manifest(argv[1])
     validate(data_set)
   else:
